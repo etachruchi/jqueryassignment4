@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Check box</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+    <div class="ab">
+        <h1>Assignment4</h1>
+        <ul>
+            <li>
+                <input type="checkbox">Parent
+                <ul>
+                    <ul>
+                        <li>
+                            <input type="checkbox">Child 1</li>
+                        <li>
+                            <input type="checkbox">Child 2</li>
+                        <li>
+                            <input type="checkbox">Child 3</li>
+                    </ul>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+        $('input[type="checkbox"]').change(function() {
+
+            var checked = $(this).prop("checked"),
+                box = $(this).parent();
+
+            box.find('input[type="checkbox"]').prop({
+                checked: checked
+            });
+
+            checkSiblings(box);
+
+            function checkSiblings(check) {
+
+                var parent = check.parent().parent(),
+                    all = false;
+
+                check.siblings().each(function() {
+                    return all = ($(this).children('input[type="checkbox"]').prop("checked") === checked);
+                });
+
+                if (all && checked) {
+                    parent.children('input[type="checkbox"]').prop("checked", checked);
+                    checkSiblings(parent);
+                } else if (all && !checked) {
+                    parent.children('input[type="checkbox"]').prop("checked", checked);
+                    checkSiblings(parent);
+                } else {
+                    check.parents("li").children('input[type="checkbox"]').prop({
+                        checked: true
+                    });
+                }
+
+            }
+        });
+    </script>
+</body>
+
+</html>
